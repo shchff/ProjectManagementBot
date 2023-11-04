@@ -1,6 +1,9 @@
-package controller;
+package controller.command;
+
+import response.Response;
 
 import java.util.List;
+
 
 public abstract class Command {
     private final String command;
@@ -11,6 +14,8 @@ public abstract class Command {
         this.command = command;
         this.argsList = argsList;
     }
+
+    public abstract Response perform();
 
     public String getCommand() {
         return command;
