@@ -1,7 +1,12 @@
 package model;
 
 import controller.Project;
+import controller.command.Commands;
 import response.Response;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Facade - обработчик запросов в компоненте model
  */
@@ -13,7 +18,7 @@ public abstract class Facade {
      */
     static public Response createProject(Project project) {
         // добавление в бд
-        return new Response("Проект создан");
+        return new Response("Проект создан!\nНазвнание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines() + "\nОписание: " + project.getDescription());
     }
 
     /**
@@ -33,5 +38,19 @@ public abstract class Facade {
                 "/createProject - создание проекта \n " +
                 "/createThemes - редактирование тем проекта\n" +
                 " /exit - завершение работы бота");
+    }
+
+    /**
+     * Возвращает параметры, которые надо заполнить
+     * @param command - комманда, в соответствии с которой надо вернуть параметры
+     * @return список параметров
+     */
+    static public ArrayList<String> getParamsByCommand(Commands command) {
+        ArrayList<String> response = new ArrayList<String>();
+        if (command == Commands.CREATE_PROJECT) {
+            String[] params = {"название", "сроки", "описание"};
+            response.addAll(new ArrayList<String>(Arrays.asList(params)));
+        }
+        return response;
     }
 }

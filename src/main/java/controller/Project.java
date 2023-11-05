@@ -10,6 +10,18 @@ package controller;
 
 public class Project {
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public String getDeadlines() {
+        return deadlines;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public Project(String projectName, String deadlines, String description) {
         this.projectName = projectName;
         this.deadlines = deadlines;

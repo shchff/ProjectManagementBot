@@ -1,6 +1,7 @@
 package controller;
 
 import controller.command.Commands;
+import model.Facade;
 
 import java.util.ArrayList;
 
@@ -9,18 +10,21 @@ import java.util.ArrayList;
  * state - состояние (EXECUTING/LISTENING)
  * command - выполняемая команда
  * iteration - итерация (какой параметр для комманды ожижается от пользователя)
- * args - параметры, заполненые пользователем
+ * args - аргументы, заполненые пользователем
+ * params - параметры выполняемой команды
  */
 public class Context {
     public State state;
     public Commands command;
     public int iteration;
+    public ArrayList<String> params;
     public ArrayList<String> args;
-    public Context(State state, Commands command, int iteration, ArrayList<String> args) {
+    public Context(State state, Commands command, int iteration, ArrayList<String> args, ArrayList<String> params) {
         this.state = state;
         this.command = command;
         this.iteration = iteration;
         this.args = args;
+        this.params = params;
     }
 
     /**
@@ -38,15 +42,18 @@ public class Context {
         command = Commands.NULL;
         iteration = 0;
         args.clear();
+        params.clear();
     }
     /**
      * перевод контекста к началу выполнения команды
+     * параметры подтягиваются из компонента module
      */
     public void startExecutingCommand(Commands command) {
         this.state = State.EXECUTING;
         this.command = command;
         this.iteration = 0;
         args.clear();
+        params = Facade.getParamsByCommand(command);
     }
 
     /**

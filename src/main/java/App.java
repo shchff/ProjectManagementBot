@@ -1,6 +1,5 @@
 
 import controller.CLIController;
-import controller.State;
 import view.CLIView;
 
 public class App {

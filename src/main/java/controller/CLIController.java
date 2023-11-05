@@ -20,7 +20,7 @@ public class CLIController extends Controller {
      * Конструктор контроллера
      */
     public CLIController() {
-        this.context = new Context(State.LISTENING, Commands.NULL, 0, new ArrayList<String>());
+        this.context = new Context(State.LISTENING, Commands.NULL, 0, new ArrayList<String>(), new ArrayList<String>());
     }
 
     /**
@@ -42,38 +42,26 @@ public class CLIController extends Controller {
 
     /**
      * Выполнение "долгой" команды
-     * @param command
      * @param arg
      * @return response
      */
-    private Response executeLongCommand(Commands command, String arg) {
-        if (command == Commands.CREATE_PROJECT) {
-            if (context.iteration < 3) {
-                if (context.iteration == 0) {
-                    context.incrementIterator();
-                    return new Response("Введи название");
-                }
-                else if (context.iteration == 1) {
-                    context.incrementIterator();
-                    context.args.add(arg);
-                    return new Response("Введи сроки");
-                }
-                else if (context.iteration == 2) {
-                    context.incrementIterator();
-                    context.args.add(arg);
-                    return new Response("Введи описание");
-                }
-            }
-            else {
-                context.args.add(arg);
+    private Response executeLongCommand(String arg) {
+        int iteration = context.iteration;
+        if (iteration > 0) {
+            context.args.add(arg);
+        }
 
-                ArrayList<String> args = new ArrayList<>();
-                args.addAll(context.args);
+        if (iteration < context.params.size()) {
+            context.incrementIterator();
+            return new Response("Введите " + context.params.get(iteration));
+        }
 
-                CreateProjectCommand createProjectCommand = new CreateProjectCommand(command, args);
-                context.resetContextToListening();
-                return createProjectCommand.perform();
-            }
+        ArrayList<String> args = new ArrayList<>(context.args);
+
+        if (context.command == Commands.CREATE_PROJECT) {
+            CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.command, args);
+            context.resetContextToListening();
+            return createProjectCommand.perform();
         }
         return new Response("Нет такого параметра!");
     }
@@ -87,7 +75,7 @@ public class CLIController extends Controller {
 
         context.startExecutingCommand(command);
         if (command == Commands.CREATE_PROJECT) {
-            Response firstCommandResponse = executeLongCommand(command, "");
+            Response firstCommandResponse = executeLongCommand("");
             return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse());
         }
 
@@ -125,7 +113,7 @@ public class CLIController extends Controller {
             }
         }
         else if (context.state == State.EXECUTING) {
-            return executeLongCommand(context.command, request.getRequest());
+            return executeLongCommand(request.getRequest());
         }
 
         return new Response("");
