@@ -2,32 +2,50 @@ package controller;
 
 import controller.command.Commands;
 import controller.command.CreateProjectCommand;
+import controller.command.ExitCommand;
+import controller.command.HelpCommand;
 import request.Request;
 import response.Response;
 
 import java.util.ArrayList;
 
+/**
+ * Контроллер командной строки
+ */
 public class CLIController extends Controller {
 
     private final Context context;
 
-    public CLIController(State state) {
-        this.context = new Context(state, Commands.NULL, 0, new ArrayList<String>());
+    /**
+     * Конструктор контроллера
+     */
+    public CLIController() {
+        this.context = new Context(State.LISTENING, Commands.NULL, 0, new ArrayList<String>());
     }
 
+    /**
+     * Выполнение "бастрой" команды
+     * @param command - выполняемая команда
+     * @return response - результат
+     */
     private Response executeQuickCommand(Commands command) {
-        if (command == Commands.EXIT){
-            return new Response("Работа бота завершена");
+        if (command == Commands.EXIT) {
+            ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.args);
+            return exitCommand.perform();
         }
         else if (command == Commands.HELP) {
-            return new Response("Я - бот для работы с проектом. Вот список моих команд:\n " +
-                                "/createProject - создание проекта \n " +
-                                "/createThemes - редактирование тем проекта\n" +
-                                " /exit - завершение работы бота");
+            HelpCommand helpCommand = new HelpCommand(Commands.HELP, context.args);
+            return helpCommand.perform();
         }
         return null;
     }
 
+    /**
+     * Выполнение "долгой" команды
+     * @param command
+     * @param arg
+     * @return response
+     */
     private Response executeLongCommand(Commands command, String arg) {
         if (command == Commands.CREATE_PROJECT) {
             if (context.iteration < 3) {
@@ -56,15 +74,18 @@ public class CLIController extends Controller {
                 context.resetContextToListening();
                 return createProjectCommand.perform();
             }
-
         }
         return new Response("Нет такого параметра!");
     }
 
+    /**
+     * Начало выполнения "долгой" комманды
+     * @param command
+     * @return
+     */
     private Response startLongCommand(Commands command) {
 
         context.startExecutingCommand(command);
-
         if (command == Commands.CREATE_PROJECT) {
             Response firstCommandResponse = executeLongCommand(command, "");
             return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse());
@@ -72,7 +93,11 @@ public class CLIController extends Controller {
 
         return null;
     }
-
+    /**
+     * Обрабатывает запрос и дожидается ответа.
+     * @param request запрос пользователя.
+     * @return ответ на запрос пользователя.
+     */
     @Override
     public Response handleWithResponse(Request request) {
 
@@ -94,7 +119,6 @@ public class CLIController extends Controller {
                     default:
                         return new Response("Неизвестная команда");
                 }
-
             }
             else {
                 return new Response("Запрос не является командой");

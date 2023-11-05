@@ -6,6 +6,9 @@ import response.Response;
 
 import java.util.ArrayList;
 
+/**
+ * Комманда создания проекта
+ */
 public class CreateProjectCommand extends Command {
 
     public CreateProjectCommand(Commands command, ArrayList<String> argsList) {

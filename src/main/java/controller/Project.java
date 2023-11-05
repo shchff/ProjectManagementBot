@@ -1,7 +1,12 @@
 package controller;
 
-import java.util.Date;
-import java.util.List;
+
+/**
+ * Проект
+ * projectName - название
+ * deadlines - сроки
+ * description - описание проекта
+ */
 
 public class Project {
 

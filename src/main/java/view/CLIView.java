@@ -6,6 +6,9 @@ import response.Response;
 
 import java.util.Scanner;
 
+/**
+ * Вид в командной строке
+ */
 public class CLIView implements View {
     private final CLIController controller;
 
@@ -13,6 +16,9 @@ public class CLIView implements View {
         this.controller = controller;
     }
 
+    /**
+     * startDialog - запуск диалога в командной строке
+     */
     public void startDialog() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Привет! Я ProjectManagementBot! Введите ваш запрос:");

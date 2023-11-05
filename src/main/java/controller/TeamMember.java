@@ -1,5 +1,8 @@
 package controller;
 
+/**
+ * Член команды
+ */
 public abstract class TeamMember {
 
     private String memberID;
