@@ -1,8 +1,8 @@
 package view;
 
-import controller.CLIController;
-import request.Request;
-import response.Response;
+import controller.Controller;
+import view.request.Request;
+import view.response.Response;
 
 import java.util.Scanner;
 
@@ -10,9 +10,9 @@ import java.util.Scanner;
  * Вид в командной строке
  */
 public class CLIView implements View {
-    private final CLIController controller;
+    private final Controller controller;
 
-    public CLIView(CLIController controller) {
+    public CLIView(Controller controller) {
         this.controller = controller;
     }
 
@@ -25,7 +25,7 @@ public class CLIView implements View {
         while (true) {
             String input = scanner.nextLine();
 
-            Request request = new Request(input);
+            Request request = new Request(input, 1l);
 
             Response response = controller.handleWithResponse(request);
 

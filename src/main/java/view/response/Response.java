@@ -1,4 +1,4 @@
-package response;
+package view.response;
 
 /**
  * Ответ на пользовательский запрос

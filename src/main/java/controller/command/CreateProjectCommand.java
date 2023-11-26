@@ -1,8 +1,8 @@
 package controller.command;
 
-import controller.Project;
-import model.Facade;
-import response.Response;
+import model.project.Project;
+import controller.Facade;
+import view.response.Response;
 
 import java.util.ArrayList;
 

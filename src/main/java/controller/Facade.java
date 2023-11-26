@@ -1,20 +1,20 @@
-package model;
+package controller;
 
-import controller.Project;
+import model.project.Project;
 import controller.command.Commands;
-import response.Response;
+import view.response.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Facade - обработчик запросов в компоненте model
+ * Facade - обработчик запросов
  */
 public abstract class Facade {
     /**
      * Добавляет проект в базу данных
      * @param project
-     * @return response
+     * @return response с сообщением о создании нового проекта
      */
     static public Response createProject(Project project) {
         // добавление в бд
@@ -23,7 +23,7 @@ public abstract class Facade {
 
     /**
      * Отправляет сообщение о выходе из бота
-     * @return
+     * @return response с сообщением о выходе
      */
     static public Response exitBot() {
         return new Response("Работа бота завершена");
@@ -35,8 +35,8 @@ public abstract class Facade {
      */
     static public Response getHelp() {
         return new Response("Я - бот для работы с проектом. Вот список моих команд:\n " +
-                "/createProject - создание проекта \n " +
-                "/createThemes - редактирование тем проекта\n" +
+                "/create_project - создание проекта \n " +
+                "/create_themes - редактирование тем проекта\n" +
                 " /exit - завершение работы бота");
     }
 
@@ -52,5 +52,10 @@ public abstract class Facade {
             response.addAll(new ArrayList<String>(Arrays.asList(params)));
         }
         return response;
+    }
+
+
+    public static Response getStartMessage() {
+        return new Response("\"Привет! Я ProjectManagementBot! Введите ваш запрос:\"");
     }
 }
