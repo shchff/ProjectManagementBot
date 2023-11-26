@@ -7,5 +7,6 @@ public enum Commands {
     EXIT,
     HELP,
     CREATE_PROJECT,
+    START,
     NULL
 }

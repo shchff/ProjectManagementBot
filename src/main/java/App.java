@@ -1,12 +1,10 @@
 
-import controller.CLIController;
+import controller.Controller;
 import view.TelegramView;
 
 public class App {
     public static void main(String[] args) {
-        CLIController controller = new CLIController();
-//        CLIView cliView = new CLIView(controller);
-//        cliView.startDialog();
+        Controller controller = new Controller();
         TelegramView telegramView = new TelegramView(controller);
         telegramView.startDialog();
     }

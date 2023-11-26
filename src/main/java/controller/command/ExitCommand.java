@@ -1,7 +1,7 @@
 package controller.command;
 
-import model.Facade;
-import response.Response;
+import controller.Facade;
+import view.response.Response;
 
 import java.util.ArrayList;
 

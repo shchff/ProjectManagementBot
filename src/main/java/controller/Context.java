@@ -1,7 +1,6 @@
 package controller;
 
 import controller.command.Commands;
-import model.Facade;
 
 import java.util.ArrayList;
 
@@ -15,16 +14,11 @@ import java.util.ArrayList;
  */
 public class Context {
 
-
     private State state;
     private Commands command;
     private int iteration;
 
-
-
     private ArrayList<String> params;
-
-
 
     private ArrayList<String> args;
     public Context(State state, Commands command, int iteration, ArrayList<String> args, ArrayList<String> params) {

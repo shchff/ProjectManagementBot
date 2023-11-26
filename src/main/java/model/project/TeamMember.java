@@ -1,4 +1,6 @@
-package controller;
+package model.project;
+
+import model.project.Role;
 
 /**
  * Член команды

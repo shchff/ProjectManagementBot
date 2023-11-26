@@ -1,6 +1,6 @@
 package controller.command;
 
-import response.Response;
+import view.response.Response;
 
 import java.util.ArrayList;
 

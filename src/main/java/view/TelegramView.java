@@ -1,6 +1,6 @@
 package view;
 
-import controller.CLIController;
+import controller.Controller;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -10,13 +10,13 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import request.Request;
-import response.Response;
+import view.request.Request;
+import view.response.Response;
 
 public class TelegramView extends TelegramLongPollingBot implements View {
-    private final CLIController controller;
+    private final Controller controller;
 
-    public TelegramView(CLIController controller) {
+    public TelegramView(Controller controller) {
         this.controller = controller;
     }
 
@@ -36,26 +36,25 @@ public class TelegramView extends TelegramLongPollingBot implements View {
         User user = msg.getFrom();
         Long id = user.getId();
 
-        Request request = new Request(msg.getText());
+        Request request = new Request(msg.getText(), id);
 
         Response response = controller.handleWithResponse(request);
 
         sendText(id, response.getResponse());
-//        System.out.println(user.getFirstName() + " wrote " + msg.getText());
     }
-    public void sendText(Long who, String what){
+    private void sendText(Long who, String what){
         SendMessage sm = SendMessage.builder()
-                .chatId(who.toString()) //Who are we sending a message to
-                .text(what).build();    //Message content
+                .chatId(who.toString())
+                .text(what).build();
         try {
             execute(sm);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);      //Any error will be printed here
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     *
+     * startDialog - запуск диалога
      */
     @Override
     public void startDialog() {

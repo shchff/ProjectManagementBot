@@ -1,4 +1,4 @@
-package controller;
+package model.project;
 /**
  * Роль члена команды
  */

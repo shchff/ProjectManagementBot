@@ -1,4 +1,4 @@
-package controller;
+package model.project;
 
 
 /**
@@ -31,6 +31,5 @@ public class Project {
     private String projectName;
     private String deadlines;
     private String description;
-//    private List<TeamMember> TeamList;
 
 }
