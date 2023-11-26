@@ -30,11 +30,11 @@ public class CLIController extends Controller {
      */
     private Response executeQuickCommand(Commands command) {
         if (command == Commands.EXIT) {
-            ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.args);
+            ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.getArgs());
             return exitCommand.perform();
         }
         else if (command == Commands.HELP) {
-            HelpCommand helpCommand = new HelpCommand(Commands.HELP, context.args);
+            HelpCommand helpCommand = new HelpCommand(Commands.HELP, context.getArgs());
             return helpCommand.perform();
         }
         return null;
@@ -46,20 +46,20 @@ public class CLIController extends Controller {
      * @return response
      */
     private Response executeLongCommand(String arg) {
-        int iteration = context.iteration;
+        int iteration = context.getIteration();
         if (iteration > 0) {
-            context.args.add(arg);
+            context.addArg(arg);
         }
 
-        if (iteration < context.params.size()) {
+        if (iteration < context.getParams().size()) {
             context.incrementIterator();
-            return new Response("Введите " + context.params.get(iteration));
+            return new Response("Введите " + context.getParams().get(iteration));
         }
 
-        ArrayList<String> args = new ArrayList<>(context.args);
+        ArrayList<String> args = new ArrayList<>(context.getArgs());
 
-        if (context.command == Commands.CREATE_PROJECT) {
-            CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.command, args);
+        if (context.getCommand() == Commands.CREATE_PROJECT) {
+            CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.getCommand(), args);
             context.resetContextToListening();
             return createProjectCommand.perform();
         }
@@ -95,14 +95,14 @@ public class CLIController extends Controller {
             return new Response("Запрос отсутствует");
         }
 
-        if (context.state == State.LISTENING) {
+        if (context.getState() == State.LISTENING) {
             if (requestString.charAt(0) == '/') {
                 switch (requestString) {
                     case "/exit":
                         return executeQuickCommand(Commands.EXIT);
                     case "/help":
                         return executeQuickCommand(Commands.HELP);
-                    case "/createProject":
+                    case "/create_project":
                         return startLongCommand(Commands.CREATE_PROJECT);
                     default:
                         return new Response("Неизвестная команда");
@@ -112,7 +112,7 @@ public class CLIController extends Controller {
                 return new Response("Запрос не является командой");
             }
         }
-        else if (context.state == State.EXECUTING) {
+        else if (context.getState() == State.EXECUTING) {
             return executeLongCommand(request.getRequest());
         }
 

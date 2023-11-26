@@ -15,4 +15,12 @@ public abstract class TeamMember {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getMemberID() {
+        return memberID;
+    }
+
+    public Role getRole() {
+        return role;
+    }
 }

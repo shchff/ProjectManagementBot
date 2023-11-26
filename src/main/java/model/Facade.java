@@ -35,8 +35,8 @@ public abstract class Facade {
      */
     static public Response getHelp() {
         return new Response("Я - бот для работы с проектом. Вот список моих команд:\n " +
-                "/createProject - создание проекта \n " +
-                "/createThemes - редактирование тем проекта\n" +
+                "/create_project - создание проекта \n " +
+                "/create_themes - редактирование тем проекта\n" +
                 " /exit - завершение работы бота");
     }
 
