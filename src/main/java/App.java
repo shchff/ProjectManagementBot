@@ -1,12 +1,13 @@
 
 import controller.CLIController;
-import io.github.cdimascio.dotenv.Dotenv;
-import view.CLIView;
+import view.TelegramView;
 
 public class App {
     public static void main(String[] args) {
-//        CLIController controller = new CLIController();
+        CLIController controller = new CLIController();
 //        CLIView cliView = new CLIView(controller);
 //        cliView.startDialog();
+        TelegramView telegramView = new TelegramView(controller);
+        telegramView.startDialog();
     }
 }
