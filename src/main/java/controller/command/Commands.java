@@ -1,7 +1,7 @@
 package controller.command;
 
 /**
- * Enum сделанных комманд
+ * Enum сделанных команд
  */
 public enum Commands {
     EXIT,

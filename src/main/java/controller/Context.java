@@ -30,7 +30,7 @@ public class Context {
     }
 
     /**
-     * добавление аргумента
+     * Добавление аргумента
      */
 
     public void addArg(String arg) {
@@ -38,7 +38,7 @@ public class Context {
     }
 
     /**
-     * перевод контекста к ожиданию команды от пользователя
+     * Перевод контекста к ожиданию команды от пользователя
      */
     public void resetContextToListening(){
         state = State.LISTENING;
@@ -46,7 +46,7 @@ public class Context {
     }
 
     /**
-     * "обнуление" атрибутов
+     * "Обнуление" атрибутов
      */
     private void resetContext() {
         command = Commands.NULL;
@@ -55,7 +55,7 @@ public class Context {
         params.clear();
     }
     /**
-     * перевод контекста к началу выполнения команды
+     * Перевод контекста к началу выполнения команды
      * параметры подтягиваются из компонента module
      */
     public void startExecutingCommand(Commands command) {

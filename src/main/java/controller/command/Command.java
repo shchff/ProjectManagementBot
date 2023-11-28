@@ -24,8 +24,8 @@ public abstract class Command {
     }
 
     /**
-     * Выполняет комманду со списком аргументов argsList
-     * @return response - резултьтат выполения команды
+     * Выполняет команду со списком аргументов argsList
+     * @return response - результат выполнения команды
      */
     public abstract Response perform();
 

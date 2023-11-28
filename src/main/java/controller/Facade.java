@@ -18,7 +18,7 @@ public abstract class Facade {
      */
     static public String createProject(Project project) {
         // добавление в бд
-        return "Проект создан!\nНазвнание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines() + "\nОписание: " + project.getDescription();
+        return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines() + "\nОписание: " + project.getDescription();
     }
 
     /**
@@ -30,7 +30,7 @@ public abstract class Facade {
     }
 
     /**
-     * Оптравляет сообщение с информацией о боте
+     * Отправляет сообщение с информацией о боте
      * @return string сообщение с перечислением доступных команд
      */
     static public String getHelp() {
@@ -42,7 +42,7 @@ public abstract class Facade {
 
     /**
      * Возвращает параметры, которые надо заполнить
-     * @param command - комманда, в соответствии с которой надо вернуть параметры
+     * @param command - команда, в соответствии с которой надо вернуть параметры
      * @return список параметров
      */
     static public ArrayList<String> getParamsByCommand(Commands command) {
@@ -57,7 +57,7 @@ public abstract class Facade {
 
     /**
      * Приветственное сообщение
-     * @return String - сообщение приветсвования + (в будущем) внутренняя авторизация
+     * @return String - сообщение "Привет!..." + (в будущем) внутренняя авторизация
      */
     public static String getStartMessage() {
         return "\"Привет! Я ProjectManagementBot! Введите ваш запрос:\"";

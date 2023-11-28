@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Комманда вывода информации о боте
+ * Команда вывода информации о боте
  */
 public class HelpCommand extends Command{
     /**

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Комманда создания проекта
+ * Команда создания проекта
  */
 public class CreateProjectCommand extends Command {
 

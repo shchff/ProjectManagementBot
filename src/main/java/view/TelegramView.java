@@ -16,7 +16,7 @@ import view.response.Response;
 import java.util.ArrayList;
 
 /**
- * Вид в телеграме
+ * Вид в телеграмме
  */
 
 public class TelegramView extends TelegramLongPollingBot implements View {
@@ -60,10 +60,10 @@ public class TelegramView extends TelegramLongPollingBot implements View {
 
             Response response = controller.handleWithResponse(request);
 
-            ArrayList<String> responsers = response.getResponseUserIds();
+            ArrayList<String> responseIds = response.getResponseUserIds();
 
-            for (String responser : responsers) {
-                sendText(responser, response.getResponse());
+            for (String responseId : responseIds) {
+                sendText(responseId, response.getResponse());
             }
         }
     }
@@ -85,7 +85,7 @@ public class TelegramView extends TelegramLongPollingBot implements View {
     }
 
     /**
-     * startDialog - запуск диалога в телеграме
+     * startDialog - запуск диалога в телеграмме
      */
     @Override
     public void startDialog() {

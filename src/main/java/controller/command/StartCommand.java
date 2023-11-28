@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Комманда запуска бота
+ * Команда запуска бота
  */
 public class StartCommand extends Command{
     /**

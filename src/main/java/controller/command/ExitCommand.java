@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Коммада завершения работы бота
+ * Команда завершения работы бота
  */
 public class ExitCommand extends Command{
     /**
