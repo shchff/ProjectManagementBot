@@ -28,6 +28,9 @@ import java.util.Locale;
 
 /**
  * Вид в телеграмме
+ * controller - контроллер
+ * currentMonth - текущий месяц (для календаря)
+ * lastMessageId - id последнего сообщения
  */
 
 public class TelegramView extends TelegramLongPollingBot implements View {
@@ -107,7 +110,8 @@ public class TelegramView extends TelegramLongPollingBot implements View {
 
                 String formattedDate = selectedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-                sendReply(chatId, "Вы выбрали дату: " + formattedDate);
+                sendText(chatId, "Вы выбрали дату: " + formattedDate);
+
                 deletePreviousCalendar(chatId);
                 Request request = new Request(formattedDate, id.toString());
 
@@ -118,6 +122,10 @@ public class TelegramView extends TelegramLongPollingBot implements View {
         }
     }
 
+    /**
+     * @param chatId - id чата
+     * отправляет пользователю календарь для выбора даты
+     */
     private void sendCalendarRequest(String chatId) {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -188,14 +196,10 @@ public class TelegramView extends TelegramLongPollingBot implements View {
         }
     }
 
-    private void sendReply(String chatId, String message) {
-        SendMessage response = new SendMessage(chatId, message);
-        try {
-            execute(response);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    /**
+     * Удаляет календарь в сообщении по id
+     * @param chatId - id чата
+     */
     private void deletePreviousCalendar(String chatId) {
         if (lastMessageId != null) {
             DeleteMessage deleteMessage = new DeleteMessage(chatId, lastMessageId);

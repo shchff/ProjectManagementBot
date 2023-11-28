@@ -5,7 +5,6 @@ import controller.Facade;
 import view.response.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
