@@ -13,7 +13,7 @@ import java.util.Arrays;
 public abstract class Facade {
     /**
      * Добавляет проект в базу данных
-     * @param project
+     * @param project - проект
      * @return response с сообщением о создании нового проекта
      */
     static public Response createProject(Project project) {
@@ -31,7 +31,7 @@ public abstract class Facade {
 
     /**
      * Оптравляет сообщение с информацией о боте
-     * @return
+     * @return response сообщение с перечислением доступных команд
      */
     static public Response getHelp() {
         return new Response("Я - бот для работы с проектом. Вот список моих команд:\n " +
@@ -55,6 +55,10 @@ public abstract class Facade {
     }
 
 
+    /**
+     * Приветственное сообщение
+     * @return response - сообщение приветсвования + (в будущем) внутренняя авторизация
+     */
     public static Response getStartMessage() {
         return new Response("\"Привет! Я ProjectManagementBot! Введите ваш запрос:\"");
     }
