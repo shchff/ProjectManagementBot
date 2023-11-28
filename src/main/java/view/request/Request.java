@@ -12,6 +12,10 @@ public class Request
         this.request = request;
         this.userId = userId;
     }
+    public Request(String request) {
+        this.request = request;
+        this.userId = "";
+    }
 
     /**
      * @return возвращает запрос пользователя

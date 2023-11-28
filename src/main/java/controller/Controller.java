@@ -55,7 +55,7 @@ public class Controller {
 
         if (iteration < context.getParams().size()) {
             context.incrementIterator();
-            return new Response("Введите " + context.getParams().get(iteration), new ArrayList<>(Collections.singletonList(requestUserId)));
+            return new Response("Введите " + context.getParams().get(iteration).getName(), new ArrayList<>(Collections.singletonList(requestUserId)), context.getParams().get(iteration).getRequestedTypes());
         }
 
         ArrayList<String> args = new ArrayList<>(context.getArgs());
@@ -65,6 +65,7 @@ public class Controller {
             context.resetContextToListening();
             return createProjectCommand.perform();
         }
+
         return new Response("Нет такого параметра!", new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 

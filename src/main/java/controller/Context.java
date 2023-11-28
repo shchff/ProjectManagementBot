@@ -18,10 +18,10 @@ public class Context {
     private Commands command;
     private int iteration;
 
-    private ArrayList<String> params;
+    private ArrayList<Params> params;
 
-    private ArrayList<String> args;
-    public Context(State state, Commands command, int iteration, ArrayList<String> args, ArrayList<String> params) {
+    private final ArrayList<String> args;
+    public Context(State state, Commands command, int iteration, ArrayList<String> args, ArrayList<Params> params) {
         this.state = state;
         this.command = command;
         this.iteration = iteration;
@@ -77,36 +77,18 @@ public class Context {
         return command;
     }
 
-    public void setCommand(Commands command) {
-        this.command = command;
-    }
-
     public int getIteration() {
         return iteration;
     }
-
-    public void setIteration(int iteration) {
-        this.iteration = iteration;
-    }
-    public ArrayList<String> getParams() {
+    public ArrayList<Params> getParams() {
         return params;
     }
 
-    public void setParams(ArrayList<String> params) {
-        this.params = params;
-    }
     public ArrayList<String> getArgs() {
         return args;
     }
 
-    public void setArgs(ArrayList<String> args) {
-        this.args = args;
-    }
     public State getState() {
         return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
     }
 }

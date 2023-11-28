@@ -2,6 +2,7 @@ package controller;
 
 import model.project.Project;
 import controller.command.Commands;
+import view.response.RequestedTypes;
 import view.response.Response;
 
 import java.util.ArrayList;
@@ -45,10 +46,11 @@ public abstract class Facade {
      * @param command - команда, в соответствии с которой надо вернуть параметры
      * @return список параметров
      */
-    static public ArrayList<String> getParamsByCommand(Commands command) {
-        ArrayList<String> response = new ArrayList<>();
+    static public ArrayList<Params> getParamsByCommand(Commands command) {
+        ArrayList<Params> response = new ArrayList<>();
         if (command == Commands.CREATE_PROJECT) {
-            String[] params = {"название", "сроки", "описание"};
+            Params[] params = {new Params("название", RequestedTypes.TEXT), new Params("сроки", RequestedTypes.DATE), new Params("описание", RequestedTypes.TEXT)};
+
             response.addAll(new ArrayList<>(Arrays.asList(params)));
         }
         return response;

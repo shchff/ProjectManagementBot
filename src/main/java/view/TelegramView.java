@@ -5,15 +5,26 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import view.request.Request;
+import view.response.RequestedTypes;
 import view.response.Response;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Вид в телеграмме
@@ -21,7 +32,8 @@ import java.util.ArrayList;
 
 public class TelegramView extends TelegramLongPollingBot implements View {
     private final Controller controller;
-
+    private LocalDate currentMonth = LocalDate.now();
+    private Integer lastMessageId;
     public TelegramView(Controller controller) {
         this.controller = controller;
     }
@@ -62,8 +74,135 @@ public class TelegramView extends TelegramLongPollingBot implements View {
 
             ArrayList<String> responseIds = response.getResponseUserIds();
 
-            for (String responseId : responseIds) {
-                sendText(responseId, response.getResponse());
+            if (response.getRequestedType() == RequestedTypes.TEXT) {
+                for (String responseId : responseIds) {
+                    sendText(responseId, response.getResponse());
+                }
+            }
+            else if (response.getRequestedType() == RequestedTypes.DATE) {
+                for (String responseId : responseIds) {
+                    sendText(responseId, response.getResponse());
+                    sendCalendarRequest(responseId);
+                }
+            }
+
+
+        } else if (update.hasCallbackQuery()) {
+
+            String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
+            String data = update.getCallbackQuery().getData();
+            if ("prev_month".equals(data)) {
+                deletePreviousCalendar(chatId);
+                currentMonth = currentMonth.minusMonths(1);
+                sendCalendarRequest(chatId);
+            } else if ("next_month".equals(data)) {
+                deletePreviousCalendar(chatId);
+                currentMonth = currentMonth.plusMonths(1);
+                sendCalendarRequest(chatId);
+            } else {
+                CallbackQuery query = update.getCallbackQuery();
+                User user = query.getFrom();
+                Long id = user.getId();
+                LocalDate selectedDate = LocalDate.parse(data, DateTimeFormatter.ISO_DATE);
+
+                String formattedDate = selectedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+                sendReply(chatId, "Вы выбрали дату: " + formattedDate);
+                deletePreviousCalendar(chatId);
+                Request request = new Request(formattedDate, id.toString());
+
+                Response response = controller.handleWithResponse(request);
+
+                sendText(response.getResponseUserIds().get(0), response.getResponse());
+            }
+        }
+    }
+
+    private void sendCalendarRequest(String chatId) {
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+
+        List<InlineKeyboardButton> monthSwitchRow = new ArrayList<>();
+
+        InlineKeyboardButton backButton = InlineKeyboardButton.builder().text("<< Пред. месяц").callbackData("prev_month").build();
+        InlineKeyboardButton currMonthButton = InlineKeyboardButton.builder().text(currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy"))).callbackData("ignore").build();
+        InlineKeyboardButton nextButton = InlineKeyboardButton.builder().text("След. месяц >>").callbackData("next_month").build();
+
+        monthSwitchRow.add(backButton);
+        monthSwitchRow.add(currMonthButton);
+        monthSwitchRow.add(nextButton);
+
+        keyboard.add(monthSwitchRow);
+
+        List<InlineKeyboardButton> daysOfWeekRow = new ArrayList<>();
+        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+            InlineKeyboardButton day = InlineKeyboardButton.builder().text(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)).callbackData("ignore").build();
+            daysOfWeekRow.add(day);
+        }
+        keyboard.add(daysOfWeekRow);
+
+        LocalDate firstDayOfMonth = currentMonth.withDayOfMonth(1);
+        int daysInMonth = currentMonth.lengthOfMonth();
+
+        int currentDayOfWeek = firstDayOfMonth.getDayOfWeek().getValue();
+
+        List<InlineKeyboardButton> currentRow = new ArrayList<>();
+        for (int i = 0; i < currentDayOfWeek - 1; i++) {
+            InlineKeyboardButton month = InlineKeyboardButton.builder().text(" ").callbackData("ignore").build();
+
+            currentRow.add(month);
+        }
+
+        for (int day = 1; day <= daysInMonth; day++) {
+            LocalDate date = firstDayOfMonth.withDayOfMonth(day);
+
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(Integer.toString(day));
+            button.setCallbackData(date.toString());
+            currentRow.add(button);
+
+            if (currentRow.size() == 7) {
+                keyboard.add(currentRow);
+                currentRow = new ArrayList<>();
+            }
+        }
+
+        while (currentRow.size() < 7 && !currentRow.isEmpty()) {
+            InlineKeyboardButton month = InlineKeyboardButton.builder().text(" ").callbackData("ignore").build();
+            currentRow.add(month);
+        }
+
+        keyboard.add(currentRow);
+
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+
+        SendMessage message = new SendMessage(chatId, "Выберите дату:");
+        message.setReplyMarkup(inlineKeyboardMarkup);
+
+        try {
+            Message sentMessage = execute(message);
+            lastMessageId = sentMessage.getMessageId();
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendReply(String chatId, String message) {
+        SendMessage response = new SendMessage(chatId, message);
+        try {
+            execute(response);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void deletePreviousCalendar(String chatId) {
+        if (lastMessageId != null) {
+            DeleteMessage deleteMessage = new DeleteMessage(chatId, lastMessageId);
+            try {
+                execute(deleteMessage);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -89,7 +228,7 @@ public class TelegramView extends TelegramLongPollingBot implements View {
      */
     @Override
     public void startDialog() {
-        TelegramBotsApi botsApi = null;
+        TelegramBotsApi botsApi;
         try {
             botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(this);
