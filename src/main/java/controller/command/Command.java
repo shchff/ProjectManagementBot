@@ -5,16 +5,22 @@ import view.response.Response;
 import java.util.ArrayList;
 
 /**
- * Комманда для выполнения контроллером
+ * Команда для выполнения контроллером
+ * command - исполняемая команда
+ * argsList - аргументы команды
+ * requestUserId - id человека, который запустил команду
  */
 
 public abstract class Command {
-    private Commands command;
-    private ArrayList<String> argsList;
+    private final Commands command;
+    private final ArrayList<String> argsList;
 
-    public Command(Commands command, ArrayList<String> argsList) {
+    protected final String requestUserId;
+
+    public Command(Commands command, ArrayList<String> argsList, String requestUserId) {
         this.command = command;
         this.argsList = argsList;
+        this.requestUserId = requestUserId;
     }
 
     /**

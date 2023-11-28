@@ -5,6 +5,7 @@ import view.request.Request;
 import view.response.Response;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Контроллер
@@ -17,7 +18,7 @@ public class Controller {
      * Конструктор контроллера
      */
     public Controller() {
-        this.context = new Context(State.LISTENING, Commands.NULL, 0, new ArrayList<String>(), new ArrayList<String>());
+        this.context = new Context(State.LISTENING, Commands.NULL, 0, new ArrayList<>(), new ArrayList<>());
     }
 
     /**
@@ -25,17 +26,17 @@ public class Controller {
      * @param command - выполняемая команда
      * @return response - результат
      */
-    private Response executeQuickCommand(Commands command) {
+    private Response executeQuickCommand(Commands command, String requestUserId) {
         if (command == Commands.EXIT) {
-            ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.getArgs());
+            ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.getArgs(), requestUserId);
             return exitCommand.perform();
         }
         else if (command == Commands.HELP) {
-            HelpCommand helpCommand = new HelpCommand(Commands.HELP, context.getArgs());
+            HelpCommand helpCommand = new HelpCommand(Commands.HELP, context.getArgs(), requestUserId);
             return helpCommand.perform();
         }
         else if (command == Commands.START) {
-            StartCommand startCommand = new StartCommand(Commands.START, context.getArgs());
+            StartCommand startCommand = new StartCommand(Commands.START, context.getArgs(), requestUserId);
             return startCommand.perform();
         }
         return null;
@@ -43,10 +44,10 @@ public class Controller {
 
     /**
      * Выполнение "долгой" команды
-     * @param arg
+     * @param arg - аргумент команды
      * @return response
      */
-    private Response executeLongCommand(String arg) {
+    private Response executeLongCommand(String arg, String requestUserId) {
         int iteration = context.getIteration();
         if (iteration > 0) {
             context.addArg(arg);
@@ -54,30 +55,30 @@ public class Controller {
 
         if (iteration < context.getParams().size()) {
             context.incrementIterator();
-            return new Response("Введите " + context.getParams().get(iteration));
+            return new Response("Введите " + context.getParams().get(iteration), new ArrayList<>(Collections.singletonList(requestUserId)));
         }
 
         ArrayList<String> args = new ArrayList<>(context.getArgs());
 
         if (context.getCommand() == Commands.CREATE_PROJECT) {
-            CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.getCommand(), args);
+            CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.getCommand(), args, requestUserId);
             context.resetContextToListening();
             return createProjectCommand.perform();
         }
-        return new Response("Нет такого параметра!");
+        return new Response("Нет такого параметра!", new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 
     /**
-     * Начало выполнения "долгой" комманды
-     * @param command
-     * @return
+     * Начало выполнения "долгой" команды
+     * @param command - выполняемая команда
+     * @return response
      */
-    private Response startLongCommand(Commands command) {
+    private Response startLongCommand(Commands command, String requestUserId) {
 
         context.startExecutingCommand(command);
         if (command == Commands.CREATE_PROJECT) {
-            Response firstCommandResponse = executeLongCommand("");
-            return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse());
+            Response firstCommandResponse = executeLongCommand("", requestUserId);
+            return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
         }
 
         return null;
@@ -92,33 +93,35 @@ public class Controller {
 
         String requestString = request.getRequest();
 
+        String requestUserId = request.getUserId();
+
         if (requestString.isEmpty()) {
-            return new Response("Запрос отсутствует");
+            return new Response("Запрос отсутствует", new ArrayList<>(Collections.singletonList(requestUserId)));
         }
 
         if (context.getState() == State.LISTENING) {
             if (requestString.charAt(0) == '/') {
                 switch (requestString) {
                     case "/exit":
-                        return executeQuickCommand(Commands.EXIT);
+                        return executeQuickCommand(Commands.EXIT, requestUserId);
                     case "/help":
-                        return executeQuickCommand(Commands.HELP);
+                        return executeQuickCommand(Commands.HELP, requestUserId);
                     case "/create_project":
-                        return startLongCommand(Commands.CREATE_PROJECT);
+                        return startLongCommand(Commands.CREATE_PROJECT, requestUserId);
                     case "/start":
-                        return executeQuickCommand(Commands.START);
+                        return executeQuickCommand(Commands.START, requestUserId);
                     default:
-                        return new Response("Неизвестная команда");
+                        return new Response("Неизвестная команда", new ArrayList<>(Collections.singletonList(requestUserId)));
                 }
             }
             else {
-                return new Response("Запрос не является командой");
+                return new Response("Запрос не является командой", new ArrayList<>(Collections.singletonList(requestUserId)));
             }
         }
         else if (context.getState() == State.EXECUTING) {
-            return executeLongCommand(request.getRequest());
+            return executeLongCommand(request.getRequest(), requestUserId);
         }
 
-        return new Response("");
+        return new Response("", new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

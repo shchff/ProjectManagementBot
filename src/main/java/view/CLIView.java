@@ -25,7 +25,7 @@ public class CLIView implements View {
         while (true) {
             String input = scanner.nextLine();
 
-            Request request = new Request(input, 1l);
+            Request request = new Request(input, "");
 
             Response response = controller.handleWithResponse(request);
 

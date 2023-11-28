@@ -5,11 +5,10 @@ package view.request;
  */
 public class Request
 {
-
     private final String request;
-    private final Long userId;
+    private final String userId;
 
-    public Request(String request, Long userId) {
+    public Request(String request, String userId) {
         this.request = request;
         this.userId = userId;
     }
@@ -19,5 +18,9 @@ public class Request
      */
     public String getRequest() {
         return request;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

@@ -14,30 +14,30 @@ public abstract class Facade {
     /**
      * Добавляет проект в базу данных
      * @param project - проект
-     * @return response с сообщением о создании нового проекта
+     * @return string с сообщением о создании нового проекта
      */
-    static public Response createProject(Project project) {
+    static public String createProject(Project project) {
         // добавление в бд
-        return new Response("Проект создан!\nНазвнание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines() + "\nОписание: " + project.getDescription());
+        return "Проект создан!\nНазвнание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines() + "\nОписание: " + project.getDescription();
     }
 
     /**
      * Отправляет сообщение о выходе из бота
-     * @return response с сообщением о выходе
+     * @return string с сообщением о выходе
      */
-    static public Response exitBot() {
-        return new Response("Работа бота завершена");
+    static public String exitBot() {
+        return "Работа бота завершена";
     }
 
     /**
      * Оптравляет сообщение с информацией о боте
-     * @return response сообщение с перечислением доступных команд
+     * @return string сообщение с перечислением доступных команд
      */
-    static public Response getHelp() {
-        return new Response("Я - бот для работы с проектом. Вот список моих команд:\n " +
+    static public String getHelp() {
+        return "Я - бот для работы с проектом. Вот список моих команд:\n " +
                 "/create_project - создание проекта \n " +
                 "/create_themes - редактирование тем проекта\n" +
-                " /exit - завершение работы бота");
+                " /exit - завершение работы бота";
     }
 
     /**
@@ -46,10 +46,10 @@ public abstract class Facade {
      * @return список параметров
      */
     static public ArrayList<String> getParamsByCommand(Commands command) {
-        ArrayList<String> response = new ArrayList<String>();
+        ArrayList<String> response = new ArrayList<>();
         if (command == Commands.CREATE_PROJECT) {
             String[] params = {"название", "сроки", "описание"};
-            response.addAll(new ArrayList<String>(Arrays.asList(params)));
+            response.addAll(new ArrayList<>(Arrays.asList(params)));
         }
         return response;
     }
@@ -57,9 +57,9 @@ public abstract class Facade {
 
     /**
      * Приветственное сообщение
-     * @return response - сообщение приветсвования + (в будущем) внутренняя авторизация
+     * @return String - сообщение приветсвования + (в будущем) внутренняя авторизация
      */
-    public static Response getStartMessage() {
-        return new Response("\"Привет! Я ProjectManagementBot! Введите ваш запрос:\"");
+    public static String getStartMessage() {
+        return "\"Привет! Я ProjectManagementBot! Введите ваш запрос:\"";
     }
 }

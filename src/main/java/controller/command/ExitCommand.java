@@ -4,6 +4,7 @@ import controller.Facade;
 import view.response.Response;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Коммада завершения работы бота
@@ -14,13 +15,13 @@ public class ExitCommand extends Command{
      * @param command
      * @param argsList
      */
-    public ExitCommand(Commands command, ArrayList<String> argsList) {
-        super(command, argsList);
+    public ExitCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
+        super(command, argsList, requestUserId);
     }
 
     @Override
     public Response perform() {
-        return Facade.exitBot();
+        return new Response(Facade.exitBot(), new ArrayList<String>(Collections.singletonList(requestUserId)));
     }
 
     @Override

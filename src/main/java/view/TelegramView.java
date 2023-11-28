@@ -13,6 +13,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import view.request.Request;
 import view.response.Response;
 
+import java.util.ArrayList;
+
 /**
  * Вид в телеграме
  */
@@ -30,7 +32,7 @@ public class TelegramView extends TelegramLongPollingBot implements View {
      */
     @Override
     public String getBotUsername() {
-        return "ProjectManagementBot";
+        return Dotenv.load().get("BOT_USERNAME");
     }
 
     /**
@@ -39,6 +41,7 @@ public class TelegramView extends TelegramLongPollingBot implements View {
      */
     @Override
     public String getBotToken() {
+
         return Dotenv.load().get("BOT_TOKEN");
     }
 
@@ -48,26 +51,32 @@ public class TelegramView extends TelegramLongPollingBot implements View {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        Message msg = update.getMessage();
-        User user = msg.getFrom();
-        Long id = user.getId();
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            Message msg = update.getMessage();
+            User user = msg.getFrom();
+            Long id = user.getId();
 
-        Request request = new Request(msg.getText(), id);
+            Request request = new Request(msg.getText(), id.toString());
 
-        Response response = controller.handleWithResponse(request);
+            Response response = controller.handleWithResponse(request);
 
-        sendText(id, response.getResponse());
+            ArrayList<String> responsers = response.getResponseUserIds();
+
+            for (String responser : responsers) {
+                sendText(responser, response.getResponse());
+            }
+        }
     }
 
     /**
      * Отправка сообщения
-     * @param who - id человека, которому отправляется сообщение
-     * @param what - текст сообщения
+     * @param userId - id человека, которому отправляется сообщение
+     * @param text - текст сообщения
      */
-    private void sendText(Long who, String what){
+    private void sendText(String userId, String text){
         SendMessage sm = SendMessage.builder()
-                .chatId(who.toString())
-                .text(what).build();
+                .chatId(userId)
+                .text(text).build();
         try {
             execute(sm);
         } catch (TelegramApiException e) {
