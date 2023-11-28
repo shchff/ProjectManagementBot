@@ -60,6 +60,6 @@ public abstract class Facade {
      * @return String - сообщение "Привет!..." + (в будущем) внутренняя авторизация
      */
     public static String getStartMessage() {
-        return "\"Привет! Я ProjectManagementBot! Введите ваш запрос:\"";
+        return "\"Привет! Я ProjectManagementBot! Ваши проекты: .... Ваша должность: .... Введите ваш запрос:\"";
     }
 }

@@ -10,16 +10,12 @@ import java.util.Collections;
  * Команда вывода информации о боте
  */
 public class HelpCommand extends Command{
-    /**
-     * @param command
-     * @param argsList
-     */
     public HelpCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
         super(command, argsList, requestUserId);
     }
 
     @Override
     public Response perform() {
-        return new Response(Facade.getHelp(), new ArrayList<String>(Collections.singletonList(requestUserId)));
+        return new Response(Facade.getHelp(), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

@@ -10,16 +10,12 @@ import java.util.Collections;
  * Команда запуска бота
  */
 public class StartCommand extends Command{
-    /**
-     * @param command
-     * @param argsList
-     */
     public StartCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
         super(command, argsList, requestUserId);
     }
 
     @Override
     public Response perform() {
-        return new Response(Facade.getStartMessage(), new ArrayList<String>(Collections.singletonList(requestUserId)));
+        return new Response(Facade.getStartMessage(), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

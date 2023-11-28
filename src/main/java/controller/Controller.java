@@ -77,6 +77,7 @@ public class Controller {
 
         context.startExecutingCommand(command);
         if (command == Commands.CREATE_PROJECT) {
+
             Response firstCommandResponse = executeLongCommand("", requestUserId);
             return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
         }

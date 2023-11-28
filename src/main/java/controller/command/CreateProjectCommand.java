@@ -20,6 +20,6 @@ public class CreateProjectCommand extends Command {
     @Override
     public Response perform() {
         Project project = new Project(getArgsList().get(0), getArgsList().get(1), getArgsList().get(2));
-        return new Response(Facade.createProject(project), new ArrayList<String>(Collections.singletonList(requestUserId)));
+        return new Response(Facade.createProject(project), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

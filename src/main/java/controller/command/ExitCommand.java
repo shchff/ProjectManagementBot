@@ -10,18 +10,13 @@ import java.util.Collections;
  * Команда завершения работы бота
  */
 public class ExitCommand extends Command{
-    /**
-     * Конструктор класса
-     * @param command
-     * @param argsList
-     */
     public ExitCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
         super(command, argsList, requestUserId);
     }
 
     @Override
     public Response perform() {
-        return new Response(Facade.exitBot(), new ArrayList<String>(Collections.singletonList(requestUserId)));
+        return new Response(Facade.exitBot(), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 
     @Override
