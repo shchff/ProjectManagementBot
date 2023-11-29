@@ -7,11 +7,11 @@ import org.hibernate.Transaction;
 import repository.ProjectRepository;
 import java.util.List;
 
-public class UserRepositoryImpl implements ProjectRepository {
+public class ProjectRepositoryImpl implements ProjectRepository {
 
     private final SessionFactory sessionFactory;
 
-    public UserRepositoryImpl(SessionFactory sessionFactory) {
+    public ProjectRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
