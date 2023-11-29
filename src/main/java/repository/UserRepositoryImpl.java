@@ -1,9 +1,10 @@
+package repository;
+
 import model.project.Project;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import repository.ProjectRepository;
-
 import java.util.List;
 
 public class UserRepositoryImpl implements ProjectRepository {
@@ -24,7 +25,8 @@ public class UserRepositoryImpl implements ProjectRepository {
     @Override
     public List<Project> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Project", Project.class).list();
+            return null;
+//                    session.createQuery("FROM Project", Project.class).list();
         }
     }
 

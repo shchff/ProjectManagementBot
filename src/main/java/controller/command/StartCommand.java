@@ -18,6 +18,7 @@ public class StartCommand extends Command{
 
     @Override
     public Response perform() {
+
         return Facade.getStartMessage();
     }
 }
