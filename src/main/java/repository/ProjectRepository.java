@@ -1,6 +1,6 @@
 package repository;
 
-import model.project.Project;
+import model.Project;
 
 import java.util.List;
 

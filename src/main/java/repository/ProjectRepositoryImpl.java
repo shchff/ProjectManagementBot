@@ -1,10 +1,10 @@
 package repository;
 
-import model.project.Project;
+import model.Project;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import repository.ProjectRepository;
+
 import java.util.List;
 
 public class ProjectRepositoryImpl implements ProjectRepository {

@@ -1,6 +1,6 @@
 package controller.command;
 
-import model.project.Project;
+import model.Project;
 import controller.Facade;
 import view.response.Response;
 

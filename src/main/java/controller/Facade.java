@@ -1,9 +1,8 @@
 package controller;
 
-import model.project.Project;
+import model.Project;
 import controller.command.Commands;
 import view.response.RequestedTypes;
-import view.response.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;

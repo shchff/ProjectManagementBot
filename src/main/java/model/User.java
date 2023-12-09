@@ -1,8 +1,4 @@
-package model.user;
-
-import model.project.Role;
-
-
+package model;
 
 public class User {
 
