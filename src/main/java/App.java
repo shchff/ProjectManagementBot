@@ -1,12 +1,16 @@
 import controller.Controller;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import repository.HibernateUtil;
 import view.TelegramView;
 
 
 public class App {
     // Задача 3
+
+    private static final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     public static void main(String[] args) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
 
         Controller controller = new Controller();
         TelegramView telegramView = new TelegramView(controller);

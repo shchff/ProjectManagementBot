@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public abstract class Command {
     private final Commands command;
     private final ArrayList<String> argsList;
-
     protected final String requestUserId;
 
     public Command(Commands command, ArrayList<String> argsList, String requestUserId) {
@@ -36,5 +35,4 @@ public abstract class Command {
     public ArrayList<String> getArgsList() {
         return argsList;
     }
-
 }

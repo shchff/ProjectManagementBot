@@ -1,7 +1,11 @@
 package controller;
 
-import model.Project;
 import controller.command.Commands;
+import model.Project;
+import org.hibernate.SessionFactory;
+import repository.HibernateUtil;
+import repository.ProjectRepository;
+import repository.ProjectRepositoryImpl;
 import view.response.RequestedTypes;
 
 import java.util.ArrayList;
@@ -17,8 +21,12 @@ public abstract class Facade {
      * @return string с сообщением о создании нового проекта
      */
     static public String createProject(Project project) {
-        // добавление в бд
-        return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines() + "\nОписание: " + project.getDescription();
+        //сохранение в базу данных
+
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        ProjectRepository projectRepository = new ProjectRepositoryImpl(sessionFactory);
+        projectRepository.save(project);
+        return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines().getStart() + " - " + project.getDeadlines().getEnd()  + "\nОписание: " + project.getDescription();
     }
 
     /**
@@ -45,10 +53,10 @@ public abstract class Facade {
      * @param command - команда, в соответствии с которой надо вернуть параметры
      * @return список параметров
      */
-    static public ArrayList<Params> getParamsByCommand(Commands command) {
-        ArrayList<Params> response = new ArrayList<>();
+    static public ArrayList<Param> getParamsByCommand(Commands command) {
+        ArrayList<Param> response = new ArrayList<>();
         if (command == Commands.CREATE_PROJECT) {
-            Params[] params = {new Params("название", RequestedTypes.TEXT), new Params("сроки", RequestedTypes.DATE), new Params("описание", RequestedTypes.TEXT)};
+            Param[] params = {new Param("название", RequestedTypes.TEXT), new Param("начало", RequestedTypes.DATE), new Param("окончание", RequestedTypes.DATE), new Param("описание", RequestedTypes.TEXT)};
 
             response.addAll(new ArrayList<>(Arrays.asList(params)));
         }
@@ -60,7 +68,7 @@ public abstract class Facade {
      * Приветственное сообщение
      * @return String - сообщение "Привет!..." + (в будущем) внутренняя авторизация
      */
-    public static String getStartMessage() {
+    public static String getStartMessage(String id) {
         return "\"Привет! Я ProjectManagementBot! Ваши проекты: .... Ваша должность: .... Введите ваш запрос:\"";
     }
 }

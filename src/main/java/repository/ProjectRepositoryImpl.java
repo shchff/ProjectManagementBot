@@ -4,6 +4,7 @@ import model.Project;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import repository.Entity.ProjectEntity;
 
 import java.util.List;
 
@@ -30,11 +31,18 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         }
     }
 
+
     @Override
     public void save(Project project) {
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setDescription(project.getDescription());
+        projectEntity.setTitle(projectEntity.getTitle());
+        projectEntity.setTimeStart(projectEntity.getTimeStart());
+        projectEntity.setTimeEnd(projectEntity.getTimeEnd());
+
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(project);
+            session.save(projectEntity);
             transaction.commit();
         }
     }

@@ -56,7 +56,6 @@ public class TelegramView extends TelegramLongPollingBot implements View {
      */
     @Override
     public String getBotToken() {
-
         return Dotenv.load().get("BOT_TOKEN");
     }
 
@@ -77,21 +76,12 @@ public class TelegramView extends TelegramLongPollingBot implements View {
 
             ArrayList<String> responseIds = response.getResponseUserIds();
 
-            if (response.getRequestedType() == RequestedTypes.TEXT) {
-                for (String responseId : responseIds) {
-                    sendText(responseId, response.getResponse());
-                }
-            }
-            else if (response.getRequestedType() == RequestedTypes.DATE) {
-                for (String responseId : responseIds) {
-                    sendText(responseId, response.getResponse());
-                    sendCalendarRequest(responseId);
-                }
-            }
+            System.out.println("Запрашиваемый тип на : " + response.getRequestedType());
+
+            sendTextOnResponse(response, responseIds);
 
 
         } else if (update.hasCallbackQuery()) {
-
             String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
             String data = update.getCallbackQuery().getData();
             if ("prev_month".equals(data)) {
@@ -109,15 +99,31 @@ public class TelegramView extends TelegramLongPollingBot implements View {
                 LocalDate selectedDate = LocalDate.parse(data, DateTimeFormatter.ISO_DATE);
 
                 String formattedDate = selectedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                deletePreviousCalendar(chatId);
 
                 sendText(chatId, "Вы выбрали дату: " + formattedDate);
 
-                deletePreviousCalendar(chatId);
                 Request request = new Request(formattedDate, id.toString());
 
                 Response response = controller.handleWithResponse(request);
+                System.out.println("Запрашиваемы тип на : " + response.getRequestedType());
+                ArrayList<String> responseIds = response.getResponseUserIds();
 
-                sendText(response.getResponseUserIds().get(0), response.getResponse());
+                sendTextOnResponse(response, responseIds);
+            }
+        }
+    }
+
+    private void sendTextOnResponse(Response response, ArrayList<String> responseIds) {
+        if (response.getRequestedType() == RequestedTypes.TEXT) {
+            for (String responseId : responseIds) {
+                sendText(responseId, response.getResponse());
+            }
+        }
+        else if (response.getRequestedType() == RequestedTypes.DATE) {
+            for (String responseId : responseIds) {
+                sendText(responseId, response.getResponse());
+                sendCalendarRequest(responseId);
             }
         }
     }
