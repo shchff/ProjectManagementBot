@@ -1,9 +1,12 @@
 package controller.command;
 
+import model.Deadline;
 import model.Project;
 import controller.Facade;
 import view.response.Response;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,7 +21,10 @@ public class CreateProjectCommand extends Command {
 
     @Override
     public Response perform() {
-        Project project = new Project(getArgsList().get(0), getArgsList().get(1), getArgsList().get(2));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate start = LocalDate.parse(getArgsList().get(1), formatter);
+        LocalDate end = LocalDate.parse(getArgsList().get(2), formatter);
+        Project project = new Project(getArgsList().get(0), new Deadline(start, end), getArgsList().get(3));
         return new Response(Facade.createProject(project), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

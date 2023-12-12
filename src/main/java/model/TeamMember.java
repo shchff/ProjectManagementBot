@@ -3,7 +3,7 @@ package model;
 /**
  * Член команды
  */
-public abstract class TeamMember {
+public class TeamMember {
 
     private String memberID;
     private Role role;

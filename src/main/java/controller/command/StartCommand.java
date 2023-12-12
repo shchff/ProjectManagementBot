@@ -16,6 +16,6 @@ public class StartCommand extends Command{
 
     @Override
     public Response perform() {
-        return new Response(Facade.getStartMessage(), new ArrayList<>(Collections.singletonList(requestUserId)));
+        return new Response(Facade.getStartMessage(requestUserId), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

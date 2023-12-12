@@ -8,11 +8,11 @@ import view.response.RequestedTypes;
  * name - название
  * requestedTypes - запрашиваемый тип
  */
-public class Params {
+public class Param {
     private final String name;
     private final RequestedTypes requestedTypes;
 
-    public Params(String name, RequestedTypes requestedTypes) {
+    public Param(String name, RequestedTypes requestedTypes) {
         this.name = name;
         this.requestedTypes = requestedTypes;
     }
