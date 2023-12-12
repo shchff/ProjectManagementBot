@@ -1,8 +1,10 @@
 package controller;
 
 import controller.command.Commands;
+import view.request.Username;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Контекст контроллера:
@@ -13,7 +15,7 @@ import java.util.ArrayList;
  * params - параметры выполняемой команды
  */
 public class Context {
-
+    private final HashMap<String, SessionState> usernameSessionStateHashMap;
     private State state;
     private Commands command;
     private int iteration;
@@ -25,6 +27,7 @@ public class Context {
         this.iteration = iteration;
         this.args = args;
         this.params = params;
+        this.usernameSessionStateHashMap = new HashMap<String, SessionState>();
     }
 
     /**
@@ -84,6 +87,22 @@ public class Context {
 
     public ArrayList<String> getArgs() {
         return args;
+    }
+
+    public HashMap<String, SessionState> getUsernameSessionStateHashMap() {
+        return usernameSessionStateHashMap;
+    }
+    public void putSessionStateByUsername(Username username, SessionState sessionState) {
+        usernameSessionStateHashMap.put(username.getUsername(), sessionState);
+    }
+
+    public SessionState getSessionStateByUsername(Username username) {
+        SessionState sessionState = usernameSessionStateHashMap.get(username.getUsername());
+        System.out.println(sessionState);
+        if (sessionState == null) {
+            return SessionState.NO_PROJECT;
+        }
+        return sessionState;
     }
 
     public State getState() {

@@ -7,10 +7,11 @@ public class Request
 {
     private final String request;
     private final String userId;
-
-    public Request(String request, String userId) {
+    private String username;
+    public Request(String request, String userId, String username) {
         this.request = request;
         this.userId = userId;
+        this.username = username;
     }
     public Request(String request) {
         this.request = request;
@@ -27,4 +28,6 @@ public class Request
     public String getUserId() {
         return userId;
     }
+
+    public String getUsername() {return username;}
 }

@@ -1,4 +1,4 @@
-package model;
+package view.request;
 
 public class Username {
     private String username;

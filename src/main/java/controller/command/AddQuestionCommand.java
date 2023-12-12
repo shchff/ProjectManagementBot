@@ -2,7 +2,7 @@ package controller.command;
 
 import controller.Facade;
 import model.Question;
-import model.Username;
+import view.request.Username;
 import view.response.Response;
 
 import java.util.ArrayList;

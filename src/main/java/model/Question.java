@@ -1,5 +1,7 @@
 package model;
 
+import view.request.Username;
+
 public class Question {
     private String question;
     private Username asker;
