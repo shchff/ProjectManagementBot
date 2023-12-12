@@ -33,9 +33,9 @@ public abstract class Facade {
         return "Вопрос добавлен!";
     }
 
-    static public String deleteProject() {
+    static public String deleteProject(String teamleadUserId) {
         // добавление в бд
-        return "Вопрос добавлен!";
+        return "Проект удалён!";
     }
 
     /**

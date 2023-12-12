@@ -27,7 +27,9 @@ public class Controller {
      * @param command - выполняемая команда
      * @return response - результат
      */
-    private Response executeQuickCommand(Commands command, String requestUserId) {
+    private Response executeQuickCommand(Commands command, Request request) {
+        String requestUserId = request.getUserId();
+        Username requestUsername = new Username(request.getUsername());
         if (command == Commands.EXIT) {
             ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.getArgs(), requestUserId);
             return exitCommand.perform();
@@ -39,6 +41,17 @@ public class Controller {
         else if (command == Commands.START) {
             StartCommand startCommand = new StartCommand(Commands.START, context.getArgs(), requestUserId);
             return startCommand.perform();
+        }
+        else if (command == Commands.DELETE_PROJECT) {
+            if (context.getSessionStateByUsername(requestUsername) == SessionState.HAS_PROJECT) {
+                DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(Commands.DELETE_PROJECT, context.getArgs(), requestUserId);
+                context.putSessionStateByUsername(requestUsername, SessionState.NO_PROJECT);
+                return deleteProjectCommand.perform();
+            }
+            else {
+                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+
         }
         return null;
     }
@@ -143,9 +156,9 @@ public class Controller {
             if (requestString.charAt(0) == '/') {
                 switch (requestString) {
                     case "/exit":
-                        return executeQuickCommand(Commands.EXIT, requestUserId);
+                        return executeQuickCommand(Commands.EXIT, request);
                     case "/help":
-                        return executeQuickCommand(Commands.HELP, requestUserId);
+                        return executeQuickCommand(Commands.HELP, request);
                     case "/create_project":
                         return startLongCommand(Commands.CREATE_PROJECT, request);
                     case "/add_question":
@@ -153,7 +166,9 @@ public class Controller {
                     case "/add_team_member":
                         return startLongCommand(Commands.ADD_TEAM_MEMBER, request);
                     case "/start":
-                        return executeQuickCommand(Commands.START, requestUserId);
+                        return executeQuickCommand(Commands.START, request);
+                    case "/delete_project":
+                        return executeQuickCommand(Commands.DELETE_PROJECT, request);
                     default:
                         return new Response("Неизвестная команда", new ArrayList<>(Collections.singletonList(requestUserId)));
                 }
