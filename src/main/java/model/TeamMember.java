@@ -8,6 +8,11 @@ public class TeamMember {
     private String memberID;
     private Role role;
 
+    public TeamMember(String memberID, Role role) {
+        this.memberID = memberID;
+        this.role = role;
+    }
+
     private void setMemberID(String memberID) {
         this.memberID = memberID;
     }

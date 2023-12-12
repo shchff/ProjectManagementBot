@@ -11,7 +11,8 @@ import java.util.ArrayList;
  */
 
 public class Project {
-    public Project(String projectName, Deadline deadlines, String description) {
+    public Project(String teamleadUsername, String projectName, Deadline deadlines, String description) {
+        this.teamleadUsername = teamleadUsername;
         this.projectName = projectName;
         this.deadlines = deadlines;
         this.description = description;
@@ -41,6 +42,7 @@ public class Project {
         this.description = description;
     }
 
+    private String teamleadUsername;
     private String projectName;
     private Deadline deadlines;
     private String description;

@@ -24,7 +24,7 @@ public class CreateProjectCommand extends Command {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate start = LocalDate.parse(getArgsList().get(1), formatter);
         LocalDate end = LocalDate.parse(getArgsList().get(2), formatter);
-        Project project = new Project(getArgsList().get(0), new Deadline(start, end), getArgsList().get(3));
+        Project project = new Project(requestUserId, getArgsList().get(0), new Deadline(start, end), getArgsList().get(3));
         return new Response(Facade.createProject(project), new ArrayList<>(Collections.singletonList(requestUserId)));
     }
 }

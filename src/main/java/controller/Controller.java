@@ -65,6 +65,16 @@ public class Controller {
             context.resetContextToListening();
             return createProjectCommand.perform();
         }
+        else if (context.getCommand() == Commands.ADD_QUESTION) {
+            AddQuestionCommand addQuestionCommand = new AddQuestionCommand(context.getCommand(), args, requestUserId);
+            context.resetContextToListening();
+            return addQuestionCommand.perform();
+        }
+        else if (context.getCommand() == Commands.ADD_TEAM_MEMBER) {
+            AddTeamMemberCommand addTeamMemberCommand = new AddTeamMemberCommand(context.getCommand(), args, requestUserId);
+            context.resetContextToListening();
+            return addTeamMemberCommand.perform();
+        }
 
         return new Response("Нет такого параметра!", new ArrayList<>(Collections.singletonList(requestUserId)));
     }
@@ -78,11 +88,17 @@ public class Controller {
 
         context.startExecutingCommand(command);
         if (command == Commands.CREATE_PROJECT) {
-
             Response firstCommandResponse = executeLongCommand("", requestUserId);
             return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
         }
-
+        else if (command == Commands.ADD_QUESTION) {
+            Response firstCommandResponse = executeLongCommand("", requestUserId);
+            return new Response("Добавление вопроса:\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
+        }
+        else if (command == Commands.ADD_TEAM_MEMBER) {
+            Response firstCommandResponse = executeLongCommand("", requestUserId);
+            return new Response("Добавление участника:\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
+        }
         return null;
     }
     /**
@@ -110,6 +126,10 @@ public class Controller {
                         return executeQuickCommand(Commands.HELP, requestUserId);
                     case "/create_project":
                         return startLongCommand(Commands.CREATE_PROJECT, requestUserId);
+                    case "/add_question":
+                        return startLongCommand(Commands.ADD_QUESTION, requestUserId);
+                    case "/add_team_member":
+                        return startLongCommand(Commands.ADD_TEAM_MEMBER, requestUserId);
                     case "/start":
                         return executeQuickCommand(Commands.START, requestUserId);
                     default:
