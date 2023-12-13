@@ -70,7 +70,7 @@ public class TelegramView extends TelegramLongPollingBot implements View {
             User user = msg.getFrom();
             Long id = user.getId();
 
-            Request request = new Request(msg.getText(), id.toString());
+            Request request = new Request(msg.getText(), id.toString(), user.getUserName());
 
             Response response = controller.handleWithResponse(request);
 
@@ -103,7 +103,7 @@ public class TelegramView extends TelegramLongPollingBot implements View {
 
                 sendText(chatId, "Вы выбрали дату: " + formattedDate);
 
-                Request request = new Request(formattedDate, id.toString());
+                Request request = new Request(formattedDate, id.toString(), user.getUserName());
 
                 Response response = controller.handleWithResponse(request);
                 System.out.println("Запрашиваемы тип на : " + response.getRequestedType());

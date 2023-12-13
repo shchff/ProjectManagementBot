@@ -1,10 +1,12 @@
 package model;
 
+import view.request.Username;
+
 public class Question {
     private String question;
-    private TeamMember asker;
+    private Username asker;
 
-    public Question(String question, TeamMember asker) {
+    public Question(String question, Username asker) {
         this.question = question;
         this.asker = asker;
     }
@@ -17,11 +19,11 @@ public class Question {
         this.question = question;
     }
 
-    public TeamMember getAsker() {
+    public Username getAsker() {
         return asker;
     }
 
-    public void setAsker(TeamMember asker) {
+    public void setAsker(Username asker) {
         this.asker = asker;
     }
 }

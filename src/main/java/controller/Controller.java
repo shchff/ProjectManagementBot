@@ -2,6 +2,7 @@ package controller;
 
 import controller.command.*;
 import view.request.Request;
+import view.request.Username;
 import view.response.Response;
 
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ public class Controller {
      * @param command - выполняемая команда
      * @return response - результат
      */
-    private Response executeQuickCommand(Commands command, String requestUserId) {
+    private Response executeQuickCommand(Commands command, Request request) {
+        String requestUserId = request.getUserId();
+        Username requestUsername = new Username(request.getUsername());
         if (command == Commands.EXIT) {
             ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.getArgs(), requestUserId);
             return exitCommand.perform();
@@ -39,6 +42,17 @@ public class Controller {
             StartCommand startCommand = new StartCommand(Commands.START, context.getArgs(), requestUserId);
             return startCommand.perform();
         }
+        else if (command == Commands.DELETE_PROJECT) {
+            if (context.getSessionStateByUsername(requestUsername) == SessionState.HAS_PROJECT) {
+                DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(Commands.DELETE_PROJECT, context.getArgs(), requestUserId);
+                context.putSessionStateByUsername(requestUsername, SessionState.NO_PROJECT);
+                return deleteProjectCommand.perform();
+            }
+            else {
+                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+
+        }
         return null;
     }
 
@@ -47,7 +61,9 @@ public class Controller {
      * @param arg - аргумент команды
      * @return response
      */
-    private Response executeLongCommand(String arg, String requestUserId) {
+    private Response executeLongCommand(String arg, Request request) {
+        String requestUserId = request.getUserId();
+        Username requestUsername = new Username(request.getUsername());
         int iteration = context.getIteration();
         if (iteration > 0) {
             context.addArg(arg);
@@ -63,7 +79,18 @@ public class Controller {
         if (context.getCommand() == Commands.CREATE_PROJECT) {
             CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.getCommand(), args, requestUserId);
             context.resetContextToListening();
+            context.putSessionStateByUsername(requestUsername, SessionState.HAS_PROJECT);
             return createProjectCommand.perform();
+        }
+        else if (context.getCommand() == Commands.ADD_QUESTION) {
+            AddQuestionCommand addQuestionCommand = new AddQuestionCommand(context.getCommand(), args, requestUserId);
+            context.resetContextToListening();
+            return addQuestionCommand.perform();
+        }
+        else if (context.getCommand() == Commands.ADD_TEAM_MEMBER) {
+            AddTeamMemberCommand addTeamMemberCommand = new AddTeamMemberCommand(context.getCommand(), args, requestUserId);
+            context.resetContextToListening();
+            return addTeamMemberCommand.perform();
         }
 
         return new Response("Нет такого параметра!", new ArrayList<>(Collections.singletonList(requestUserId)));
@@ -74,15 +101,39 @@ public class Controller {
      * @param command - выполняемая команда
      * @return response
      */
-    private Response startLongCommand(Commands command, String requestUserId) {
-
-        context.startExecutingCommand(command);
+    private Response startLongCommand(Commands command, Request request) {
+        String requestUserId = request.getUserId();
+        Username requestUsername = new Username(request.getUsername());
         if (command == Commands.CREATE_PROJECT) {
-
-            Response firstCommandResponse = executeLongCommand("", requestUserId);
-            return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
+            if (context.getSessionStateByUsername(requestUsername) == SessionState.NO_PROJECT) {
+                context.startExecutingCommand(command);
+                Response firstCommandResponse = executeLongCommand("", request);
+                return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+            else {
+                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
         }
-
+        else if (command == Commands.ADD_QUESTION) {
+            if (context.getSessionStateByUsername(requestUsername) == SessionState.HAS_PROJECT) {
+                context.startExecutingCommand(command);
+                Response firstCommandResponse = executeLongCommand("", request);
+                return new Response("Добавление вопроса:\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+            else {
+                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+        }
+        else if (command == Commands.ADD_TEAM_MEMBER) {
+            if (context.getSessionStateByUsername(requestUsername) == SessionState.HAS_PROJECT) {
+                context.startExecutingCommand(command);
+                Response firstCommandResponse = executeLongCommand("", request);
+                return new Response("Добавление участника:\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+            else {
+                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+            }
+        }
         return null;
     }
     /**
@@ -105,13 +156,19 @@ public class Controller {
             if (requestString.charAt(0) == '/') {
                 switch (requestString) {
                     case "/exit":
-                        return executeQuickCommand(Commands.EXIT, requestUserId);
+                        return executeQuickCommand(Commands.EXIT, request);
                     case "/help":
-                        return executeQuickCommand(Commands.HELP, requestUserId);
+                        return executeQuickCommand(Commands.HELP, request);
                     case "/create_project":
-                        return startLongCommand(Commands.CREATE_PROJECT, requestUserId);
+                        return startLongCommand(Commands.CREATE_PROJECT, request);
+                    case "/add_question":
+                        return startLongCommand(Commands.ADD_QUESTION, request);
+                    case "/add_team_member":
+                        return startLongCommand(Commands.ADD_TEAM_MEMBER, request);
                     case "/start":
-                        return executeQuickCommand(Commands.START, requestUserId);
+                        return executeQuickCommand(Commands.START, request);
+                    case "/delete_project":
+                        return executeQuickCommand(Commands.DELETE_PROJECT, request);
                     default:
                         return new Response("Неизвестная команда", new ArrayList<>(Collections.singletonList(requestUserId)));
                 }
@@ -121,7 +178,7 @@ public class Controller {
             }
         }
         else if (context.getState() == State.EXECUTING) {
-            return executeLongCommand(request.getRequest(), requestUserId);
+            return executeLongCommand(request.getRequest(), request);
         }
 
         return new Response("", new ArrayList<>(Collections.singletonList(requestUserId)));
