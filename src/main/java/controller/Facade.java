@@ -2,12 +2,13 @@ package controller;
 
 import controller.command.Commands;
 import model.Project;
+import model.Question;
+import model.TeamMember;
 import org.hibernate.SessionFactory;
 import repository.HibernateUtil;
 import repository.ProjectRepository;
 import repository.ProjectRepositoryImpl;
 import view.response.RequestedTypes;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,6 +28,21 @@ public abstract class Facade {
         ProjectRepository projectRepository = new ProjectRepositoryImpl(sessionFactory);
         projectRepository.save(project);
         return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines().getStart() + " - " + project.getDeadlines().getEnd()  + "\nОписание: " + project.getDescription();
+    }
+
+    static public String addTeamMember(TeamMember teamMember) {
+        // добавление в бд
+        return "Участник добавлен в проект!";
+    }
+
+    static public String addQuestion(Question question) {
+        // добавление в бд
+        return "Вопрос добавлен!";
+    }
+
+    static public String deleteProject(String teamleadUserId) {
+        // добавление в бд
+        return "Проект удалён!";
     }
 
     /**
