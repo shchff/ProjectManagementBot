@@ -11,8 +11,8 @@ import java.util.Collections;
  * Команда добавления члена команды
  */
 public class AddTeamMemberCommand extends Command{
-    public AddTeamMemberCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public AddTeamMemberCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     @Override

@@ -31,20 +31,20 @@ public class Controller {
         String requestUserId = request.getUserId();
         Username requestUsername = new Username(request.getUsername());
         if (command == Commands.EXIT) {
-            ExitCommand exitCommand = new ExitCommand(Commands.EXIT, context.getArgs(), requestUserId);
+            ExitCommand exitCommand = new ExitCommand(context.getArgs(), requestUserId);
             return exitCommand.perform();
         }
         else if (command == Commands.HELP) {
-            HelpCommand helpCommand = new HelpCommand(Commands.HELP, context.getArgs(), requestUserId);
+            HelpCommand helpCommand = new HelpCommand(context.getArgs(), requestUserId);
             return helpCommand.perform();
         }
         else if (command == Commands.START) {
-            StartCommand startCommand = new StartCommand(Commands.START, context.getArgs(), requestUserId);
+            StartCommand startCommand = new StartCommand(context.getArgs(), requestUserId);
             return startCommand.perform();
         }
         else if (command == Commands.DELETE_PROJECT) {
             if (context.getSessionStateByUsername(requestUsername) == SessionState.HAS_PROJECT) {
-                DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(Commands.DELETE_PROJECT, context.getArgs(), requestUserId);
+                DeleteProjectCommand deleteProjectCommand = new DeleteProjectCommand(context.getArgs(), requestUserId);
                 context.putSessionStateByUsername(requestUsername, SessionState.NO_PROJECT);
                 return deleteProjectCommand.perform();
             }
@@ -77,18 +77,18 @@ public class Controller {
         ArrayList<String> args = new ArrayList<>(context.getArgs());
 
         if (context.getCommand() == Commands.CREATE_PROJECT) {
-            CreateProjectCommand createProjectCommand = new CreateProjectCommand(context.getCommand(), args, requestUserId);
+            CreateProjectCommand createProjectCommand = new CreateProjectCommand(args, requestUserId);
             context.resetContextToListening();
             context.putSessionStateByUsername(requestUsername, SessionState.HAS_PROJECT);
             return createProjectCommand.perform();
         }
         else if (context.getCommand() == Commands.ADD_QUESTION) {
-            AddQuestionCommand addQuestionCommand = new AddQuestionCommand(context.getCommand(), args, requestUserId);
+            AddQuestionCommand addQuestionCommand = new AddQuestionCommand(args, requestUserId);
             context.resetContextToListening();
             return addQuestionCommand.perform();
         }
         else if (context.getCommand() == Commands.ADD_TEAM_MEMBER) {
-            AddTeamMemberCommand addTeamMemberCommand = new AddTeamMemberCommand(context.getCommand(), args, requestUserId);
+            AddTeamMemberCommand addTeamMemberCommand = new AddTeamMemberCommand(args, requestUserId);
             context.resetContextToListening();
             return addTeamMemberCommand.perform();
         }

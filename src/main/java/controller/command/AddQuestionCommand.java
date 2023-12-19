@@ -11,8 +11,8 @@ import java.util.Collections;
  * Команда добавления вопроса
  */
 public class AddQuestionCommand extends Command{
-    public AddQuestionCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public AddQuestionCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     @Override
