@@ -97,6 +97,15 @@ public class Controller {
     }
 
     /**
+     * Возвращает response с сообщением о невозможности выполнения команды
+     * @param requestUserId - id юзера, которому надо отправить response
+     * @return response
+     */
+    private Response commandNotAvailableMessage(String requestUserId) {
+        return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+    }
+
+    /**
      * Начало выполнения "долгой" команды
      * @param command - выполняемая команда
      * @return response
@@ -111,7 +120,7 @@ public class Controller {
                 return new Response("Начинается создание проекта\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
             }
             else {
-                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+                return commandNotAvailableMessage(requestUserId);
             }
         }
         else if (command == Commands.ADD_QUESTION) {
@@ -121,7 +130,7 @@ public class Controller {
                 return new Response("Добавление вопроса:\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
             }
             else {
-                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+                return commandNotAvailableMessage(requestUserId);
             }
         }
         else if (command == Commands.ADD_TEAM_MEMBER) {
@@ -131,7 +140,7 @@ public class Controller {
                 return new Response("Добавление участника:\n" + firstCommandResponse.getResponse(), new ArrayList<>(Collections.singletonList(requestUserId)));
             }
             else {
-                return new Response("Данная команда не доступна", new ArrayList<>(Collections.singletonList(requestUserId)));
+                return commandNotAvailableMessage(requestUserId);
             }
         }
         return null;

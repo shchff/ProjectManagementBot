@@ -7,15 +7,13 @@ import view.response.Response;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+/**
+ * Команда добавления члена команды
+ */
 public class AddTeamMemberCommand extends Command{
     public AddTeamMemberCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
         super(command, argsList, requestUserId);
     }
-
-    /**
-     * @return
-     */
 
     @Override
     public Response perform() {

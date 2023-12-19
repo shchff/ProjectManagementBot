@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ProjectManagmentDB@5.165.236.240" uuid="8f4a9294-3b9c-4eb4-bf2f-45b661ecf123">
+    <data-source source="LOCAL" name="postgres@Actual" uuid="26ca8dea-c2bb-4278-b390-7b9ee491921b">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
+      <remarks>База данных на Ubuntu</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://5.165.236.240:2700/ProjectManagmentDB</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="97288a63-9f69-49ec-960d-255ca40c6f2a">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate
+
+C:/Users/Egor/Desktop/Coding/Java/Projects/ProjectManagementBot/src/main/resources/hibernate.cfg.xml</remarks>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://5.165.236.240:2700/ProjectManagmentDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>

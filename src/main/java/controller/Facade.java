@@ -1,11 +1,14 @@
 package controller;
 
-import model.Project;
 import controller.command.Commands;
+import model.Project;
 import model.Question;
 import model.TeamMember;
+import org.hibernate.SessionFactory;
+import repository.HibernateUtil;
+import repository.ProjectRepository;
+import repository.ProjectRepositoryImpl;
 import view.response.RequestedTypes;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -19,7 +22,11 @@ public abstract class Facade {
      * @return string с сообщением о создании нового проекта
      */
     static public String createProject(Project project) {
-        // добавление в бд
+        //сохранение в базу данных
+
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        ProjectRepository projectRepository = new ProjectRepositoryImpl(sessionFactory);
+        projectRepository.save(project);
         return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines().getStart() + " - " + project.getDeadlines().getEnd()  + "\nОписание: " + project.getDescription();
     }
 
@@ -52,14 +59,9 @@ public abstract class Facade {
      */
     static public String getHelp() {
         return "Я - бот для работы с проектом. Вот список моих команд:\n " +
-                "/start - запуск бота\n " +
                 "/create_project - создание проекта \n " +
-                "/delete_project - удаление проекта\n" +
-                "/add_question - добавление вопроса\n" +
-                "/delete_question - удаление вопроса\n" +
-                "/add_team_member - добавление участника\n" +
-                "/delete_team_member - добавление участника\n" +
-                "/exit - завершение работы бота";
+                "/create_themes - редактирование тем проекта\n" +
+                " /exit - завершение работы бота";
     }
 
     /**
@@ -71,14 +73,7 @@ public abstract class Facade {
         ArrayList<Param> response = new ArrayList<>();
         if (command == Commands.CREATE_PROJECT) {
             Param[] params = {new Param("название", RequestedTypes.TEXT), new Param("начало", RequestedTypes.DATE), new Param("окончание", RequestedTypes.DATE), new Param("описание", RequestedTypes.TEXT)};
-            response.addAll(new ArrayList<>(Arrays.asList(params)));
-        }
-        else if (command == Commands.ADD_TEAM_MEMBER) {
-            Param[] params = {new Param("username", RequestedTypes.TEXT), new Param("роль", RequestedTypes.TEXT)};
-            response.addAll(new ArrayList<>(Arrays.asList(params)));
-        }
-        else if (command == Commands.ADD_QUESTION) {
-            Param[] params = {new Param("вопрос", RequestedTypes.TEXT)};
+
             response.addAll(new ArrayList<>(Arrays.asList(params)));
         }
         return response;

@@ -12,6 +12,7 @@ target/
 *.iml
 *.ipr
 
+
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -39,3 +40,4 @@ build/
 
 .env*
 /src/main/resources/
+
