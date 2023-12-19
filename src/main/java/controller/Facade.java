@@ -1,12 +1,10 @@
 package controller;
 
-import model.Project;
 import controller.command.Commands;
+import model.Project;
 import model.Question;
 import model.TeamMember;
-import org.hibernate.SessionFactory;
-import repository.Entity.ProjectEntity;
-import repository.HibernateUtil;
+import repository.MapperService;
 import repository.ProjectRepository;
 import repository.ProjectRepositoryImpl;
 import view.response.RequestedTypes;
@@ -23,15 +21,13 @@ public abstract class Facade {
      * @param project - проект
      * @return string с сообщением о создании нового проекта
      */
+
+
     static public String createProject(Project project) {
         //сохранение в базу данных
 
         ProjectRepository projectRepository = new ProjectRepositoryImpl();
-
-
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setDescription("FACADE");
-        projectRepository.save(projectEntity);
+        projectRepository.save(MapperService.mapToProjectEntity(project));
         return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines().getStart() + " - " + project.getDeadlines().getEnd()  + "\nОписание: " + project.getDescription();
     }
 
