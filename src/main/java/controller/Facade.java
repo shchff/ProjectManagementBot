@@ -24,9 +24,9 @@ public abstract class Facade {
     static public String createProject(Project project) {
         //сохранение в базу данных
 
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        ProjectRepository projectRepository = new ProjectRepositoryImpl(sessionFactory);
-        projectRepository.save(project);
+//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+//        ProjectRepository projectRepository = new ProjectRepositoryImpl(sessionFactory);
+//        projectRepository.save(project);
         return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines().getStart() + " - " + project.getDeadlines().getEnd()  + "\nОписание: " + project.getDescription();
     }
 
@@ -74,6 +74,14 @@ public abstract class Facade {
         if (command == Commands.CREATE_PROJECT) {
             Param[] params = {new Param("название", RequestedTypes.TEXT), new Param("начало", RequestedTypes.DATE), new Param("окончание", RequestedTypes.DATE), new Param("описание", RequestedTypes.TEXT)};
 
+            response.addAll(new ArrayList<>(Arrays.asList(params)));
+        }
+        else if (command == Commands.ADD_TEAM_MEMBER) {
+            Param[] params = {new Param("username", RequestedTypes.TEXT), new Param("роль", RequestedTypes.TEXT)};
+            response.addAll(new ArrayList<>(Arrays.asList(params)));
+        }
+        else if (command == Commands.ADD_QUESTION) {
+            Param[] params = {new Param("вопрос", RequestedTypes.TEXT)};
             response.addAll(new ArrayList<>(Arrays.asList(params)));
         }
         return response;
