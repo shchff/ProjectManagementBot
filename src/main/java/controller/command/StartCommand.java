@@ -10,8 +10,8 @@ import java.util.Collections;
  * Команда запуска бота
  */
 public class StartCommand extends Command{
-    public StartCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public StartCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     @Override

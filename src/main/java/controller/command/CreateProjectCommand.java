@@ -15,8 +15,8 @@ import java.util.Collections;
  */
 public class CreateProjectCommand extends Command {
 
-    public CreateProjectCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public CreateProjectCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     @Override

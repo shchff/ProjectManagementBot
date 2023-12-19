@@ -10,8 +10,8 @@ import java.util.Collections;
  * Команда вывода информации о боте
  */
 public class HelpCommand extends Command{
-    public HelpCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public HelpCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     @Override

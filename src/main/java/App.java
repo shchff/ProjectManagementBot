@@ -6,14 +6,12 @@ import view.TelegramView;
 
 
 public class App {
-    // Задача 3
 
     private static final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     public static void main(String[] args) {
         Session session = sessionFactory.openSession();
 
-        Controller controller = new Controller();
-        TelegramView telegramView = new TelegramView(controller);
+        TelegramView telegramView = new TelegramView();
         telegramView.startDialog();
 
 

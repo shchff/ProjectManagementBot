@@ -12,12 +12,10 @@ import java.util.ArrayList;
  */
 
 public abstract class Command {
-    private final Commands command;
     private final ArrayList<String> argsList;
     protected final String requestUserId;
 
-    public Command(Commands command, ArrayList<String> argsList, String requestUserId) {
-        this.command = command;
+    public Command(ArrayList<String> argsList, String requestUserId) {
         this.argsList = argsList;
         this.requestUserId = requestUserId;
     }
@@ -27,10 +25,6 @@ public abstract class Command {
      * @return response - результат выполнения команды
      */
     public abstract Response perform();
-
-    public Commands getCommand() {
-        return command;
-    }
 
     public ArrayList<String> getArgsList() {
         return argsList;

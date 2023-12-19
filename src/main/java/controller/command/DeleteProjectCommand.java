@@ -9,8 +9,8 @@ import java.util.Collections;
  * Команда удаления проекта
  */
 public class DeleteProjectCommand extends Command{
-    public DeleteProjectCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public DeleteProjectCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     @Override

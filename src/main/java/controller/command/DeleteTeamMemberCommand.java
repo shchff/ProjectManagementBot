@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class DeleteTeamMemberCommand extends Command
 {
-    public DeleteTeamMemberCommand(Commands command, ArrayList<String> argsList, String requestUserId) {
-        super(command, argsList, requestUserId);
+    public DeleteTeamMemberCommand(ArrayList<String> argsList, String requestUserId) {
+        super(argsList, requestUserId);
     }
 
     /**

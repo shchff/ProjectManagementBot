@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,11 +35,12 @@ import java.util.Locale;
  */
 
 public class TelegramView extends TelegramLongPollingBot implements View {
-    private final Controller controller;
     private LocalDate currentMonth = LocalDate.now();
     private Integer lastMessageId;
-    public TelegramView(Controller controller) {
-        this.controller = controller;
+    private final HashMap<String, Controller> usersBase;
+
+    public TelegramView() {
+        this.usersBase = new HashMap<>();
     }
 
     /**
@@ -69,14 +71,16 @@ public class TelegramView extends TelegramLongPollingBot implements View {
             Message msg = update.getMessage();
             User user = msg.getFrom();
             Long id = user.getId();
-
+            String username = user.getUserName();
             Request request = new Request(msg.getText(), id.toString(), user.getUserName());
 
-            Response response = controller.handleWithResponse(request);
+            if (!usersBase.containsKey(username)) {
+                usersBase.put(username, new Controller());
+            }
+
+            Response response = usersBase.get(username).handleWithResponse(request);
 
             ArrayList<String> responseIds = response.getResponseUserIds();
-
-            System.out.println("Запрашиваемый тип на : " + response.getRequestedType());
 
             sendTextOnResponse(response, responseIds);
 
@@ -104,9 +108,12 @@ public class TelegramView extends TelegramLongPollingBot implements View {
                 sendText(chatId, "Вы выбрали дату: " + formattedDate);
 
                 Request request = new Request(formattedDate, id.toString(), user.getUserName());
+                String username = user.getUserName();
+                if (!usersBase.containsKey(username)) {
+                    usersBase.put(username, new Controller());
+                }
 
-                Response response = controller.handleWithResponse(request);
-                System.out.println("Запрашиваемы тип на : " + response.getRequestedType());
+                Response response = usersBase.get(username).handleWithResponse(request);
                 ArrayList<String> responseIds = response.getResponseUserIds();
 
                 sendTextOnResponse(response, responseIds);
