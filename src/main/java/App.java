@@ -1,7 +1,8 @@
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import repository.Entity.ProjectEntity;
 import repository.HibernateUtil;
+import repository.ProjectRepository;
+import repository.ProjectRepositoryImpl;
 import view.TelegramView;
 
 
@@ -13,23 +14,13 @@ public class App {
         TelegramView telegramView = new TelegramView();
         telegramView.startDialog();
 
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
+        ProjectRepository projectRepository = new ProjectRepositoryImpl();
 
         ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setDescription("ggh");
+        projectEntity.setDescription("main");
 
-        //==save, но save не надо юзать
-        session.persist(projectEntity);
-
+        projectRepository.save(projectEntity);
 
 
-//        for (ProjectEntity something : result) {
-//            System.out.println(something);
-//        }
-
-        session.getTransaction().commit();
-        session.close();
-        HibernateUtil.shutdown();
     }
 }

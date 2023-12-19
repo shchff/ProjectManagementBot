@@ -5,6 +5,7 @@ import controller.command.Commands;
 import model.Question;
 import model.TeamMember;
 import org.hibernate.SessionFactory;
+import repository.Entity.ProjectEntity;
 import repository.HibernateUtil;
 import repository.ProjectRepository;
 import repository.ProjectRepositoryImpl;
@@ -25,9 +26,12 @@ public abstract class Facade {
     static public String createProject(Project project) {
         //сохранение в базу данных
 
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        ProjectRepository projectRepository = new ProjectRepositoryImpl(sessionFactory);
-        projectRepository.save(project);
+        ProjectRepository projectRepository = new ProjectRepositoryImpl();
+
+
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setDescription("FACADE");
+        projectRepository.save(projectEntity);
         return "Проект создан!\nНазвание проекта: " + project.getProjectName() + "\nСроки: " + project.getDeadlines().getStart() + " - " + project.getDeadlines().getEnd()  + "\nОписание: " + project.getDescription();
     }
 

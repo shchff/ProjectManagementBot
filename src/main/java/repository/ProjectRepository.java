@@ -1,13 +1,14 @@
 package repository;
 
 import model.Project;
+import repository.Entity.ProjectEntity;
 
 import java.util.List;
 
 public interface ProjectRepository {
     Project findById(int id);
     List<Project> findAll();
-    void save(Project project);
-    void update(Project project);
-    void delete(Project project);
+    void save(ProjectEntity project);
+    void update(ProjectEntity  project);
+    void delete(ProjectEntity  project);
 }

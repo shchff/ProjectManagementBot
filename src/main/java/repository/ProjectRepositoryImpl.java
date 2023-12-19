@@ -1,5 +1,8 @@
 package repository;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import model.Project;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,59 +12,56 @@ import repository.Entity.ProjectEntity;
 import java.util.List;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
+    private SessionFactory sessionFactory;
 
-    private final SessionFactory sessionFactory;
-
-    public ProjectRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public ProjectRepositoryImpl() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
     @Override
     public Project findById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Project.class, id);
-        }
+        Session session = sessionFactory.openSession();
+        Project project = session.get(Project.class, id);
+        session.close();
+        return project;
     }
 
     @Override
     public List<Project> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return null;
-//                    session.createQuery("FROM Project", Project.class).list();
-        }
-    }
-
-
-    @Override
-    public void save(Project project) {
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setDescription(project.getDescription());
-        projectEntity.setTitle(projectEntity.getTitle());
-        projectEntity.setTimeStart(projectEntity.getTimeStart());
-        projectEntity.setTimeEnd(projectEntity.getTimeEnd());
-
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.save(projectEntity);
-            transaction.commit();
-        }
+        Session session = sessionFactory.openSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Project> query = builder.createQuery(Project.class);
+        Root<Project> root = query.from(Project.class);
+        query.select(root);
+        List<Project> projects = session.createQuery(query).getResultList();
+        session.close();
+        return projects;
     }
 
     @Override
-    public void update(Project user) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.update(user);
-            transaction.commit();
-        }
+    public void save(ProjectEntity project) {
+        Session session = sessionFactory.openSession();
+        session.getTransaction().begin();
+        session.persist(project);
+        session.getTransaction().commit();
+        session.close();
     }
 
     @Override
-    public void delete(Project project) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.delete(project);
-            transaction.commit();
-        }
+    public void update(ProjectEntity  project) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(project);
+        transaction.commit();
+        session.close();
+    }
+
+    @Override
+    public void delete(ProjectEntity  project) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(project);
+        transaction.commit();
+        session.close();
     }
 }
